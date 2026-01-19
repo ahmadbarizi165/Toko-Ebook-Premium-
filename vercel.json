@@ -1,11 +1,7 @@
 {
   "version": 2,
-  "name": "toko-ebook-premium-barizi",
   "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
+    { "src": "server.js", "use": "@vercel/node" }
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/server.js" },
