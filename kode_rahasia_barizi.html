@@ -3,50 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Toko Ebook Barizi</title>
+    <title>Dashboard Admin Rahasia - Barizi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-100 p-5">
+<body class="bg-slate-50 min-h-screen p-4 md:p-8">
     <div class="max-w-6xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800">Daftar Pesanan Masuk</h1>
-        
-        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <table class="w-full text-left border-collapse">
-                <thead class="bg-blue-600 text-white">
-                    <tr>
-                        <th class="p-4">Tanggal</th>
-                        <th class="p-4">Nama Pelanggan</th>
-                        <th class="p-4">Email</th>
-                        <th class="p-4">Ebook</th>
-                        <th class="p-4">Bukti Transfer</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelPesanan">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-800">Daftar Pesanan Masuk</h1>
+                <p class="text-slate-500">Kelola penjualan Ebook Premium Anda di sini.</p>
+            </div>
+            <button onclick="muatPesanan()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition shadow-lg">
+                Segarkan Data (Refresh)
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-800 text-white text-sm uppercase">
+                        <tr>
+                            <th class="p-4">Tanggal</th>
+                            <th class="p-4">Nama Pelanggan</th>
+                            <th class="p-4">Email</th>
+                            <th class="p-4">Judul Ebook</th>
+                            <th class="p-4 text-center">Aksi Pelayanan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelPesanan" class="divide-y divide-slate-100 text-slate-700">
+                        <tr>
+                            <td colspan="5" class="p-10 text-center text-slate-400 italic">Sedang memuat data pesanan...</td>
+                        </tr>
                     </tbody>
-            </table>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
         async function muatPesanan() {
-            const respon = await fetch('/api/orders');
-            const data = await respon.json();
-            const tabel = document.getElementById('tabelPesanan');
-            
-            tabel.innerHTML = data.map(order => `
-                <tr class="border-b hover:bg-gray-50">
-                    <td class="p-4 text-sm text-gray-600">${new Date(order.tanggal).toLocaleString('id-ID')}</td>
-                    <td class="p-4 font-semibold">${order.nama}</td>
-                    <td class="p-4">${order.email}</td>
-                    <td class="p-4"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">${order.buku}</span></td>
-                    <td class="p-4">
-                        <a href="${order.buktiGambar}" target="_blank" class="text-blue-600 underline text-sm">Lihat Bukti</a>
-                    </td>
-                </tr>
-            `).join('');
+            try {
+                const respon = await fetch('/api/orders');
+                const data = await respon.json();
+                const tabel = document.getElementById('tabelPesanan');
+                
+                if (data.length === 0) {
+                    tabel.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-slate-400">Belum ada pesanan yang masuk.</td></tr>';
+                    return;
+                }
+
+                tabel.innerHTML = data.map(order => `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-4 text-xs text-slate-500">${new Date(order.tanggal).toLocaleString('id-ID')}</td>
+                        <td class="p-4 font-semibold text-slate-900">${order.nama}</td>
+                        <td class="p-4 text-blue-600 italic">${order.email}</td>
+                        <td class="p-4">
+                            <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-xs font-bold border border-blue-100">
+                                ${order.buku}
+                            </span>
+                        </td>
+                        <td class="p-4 flex justify-center gap-2">
+                            <a href="${order.buktiGambar}" target="_blank" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-xs font-bold hover:bg-slate-200 transition border border-slate-300">
+                                CEK BUKTI
+                            </a>
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=${order.email}&su=Akses Download Ebook: ${order.buku}&body=Halo ${order.nama},%0D%0A%0D%0ATerima kasih telah melakukan pembayaran.%0D%0A%0D%0AIni adalah link untuk mendownload eBook Anda:%0D%0A[MASUKKAN LINK FILE DI SINI]%0D%0A%0D%0ASelamat membaca!%0D%0A%0D%0ASalam hangat,%0D%0AAhmad Barizi" 
+                               target="_blank" 
+                               class="bg-green-600 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-green-700 transition shadow-md">
+                                KIRIM FILE
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error("Gagal memuat data:", error);
+                document.getElementById('tabelPesanan').innerHTML = '<tr><td colspan="5" class="p-10 text-center text-red-500 font-bold">Gagal mengambil data dari server. Pastikan Database aktif.</td></tr>';
+            }
         }
+
+        // Panggil fungsi saat halaman dibuka
         muatPesanan();
     </script>
 </body>
-</html>
-
+    </html>
+            
