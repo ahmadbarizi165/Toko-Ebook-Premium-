@@ -10,52 +10,74 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Koneksi Database
-mongoose.connect(process.env.DATABASE_URL);
+// --- KONEKSI DATABASE ---
+// Pastikan DATABASE_URL sudah ada di Environment Variables Vercel
+mongoose.connect(process.env.DATABASE_URL)
+    .then(() => console.log("MongoDB Terhubung"))
+    .catch(err => console.error("Gagal Koneksi Database:", err));
 
-// Konfigurasi Cloudinary
+// --- KONFIGURASI CLOUDINARY BARIZI ---
 cloudinary.config({
     cloud_name: 'dvq18aq4p',
     api_key: '73295193389493',
-    api_secret: process.env.CLOUDINARY_API_SECRET
+    api_secret: process.env.CLOUDINARY_API_SECRET // Diambil dari Saved Info
 });
 
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    params: { folder: 'toko_ebook_barizi' }
+    params: {
+        folder: 'toko_ebook_premium',
+        allowed_formats: ['jpg', 'png', 'jpeg']
+    }
 });
 const upload = multer({ storage: storage });
 
-// Model Order
-const Order = mongoose.model('Order', new mongoose.Schema({
-    nama: String, email: String, buku: String, buktiGambar: String, tanggal: { type: Date, default: Date.now }
-}));
+// --- MODEL DATA ---
+const OrderSchema = new mongoose.Schema({
+    nama: String,
+    email: String,
+    buku: String,
+    buktiGambar: String,
+    status: { type: String, default: 'Menunggu Verifikasi' },
+    tanggal: { type: Date, default: Date.now }
+});
+const Order = mongoose.model('Order', OrderSchema);
 
-// Route Tampilan
+// --- ROUTES TAMPILAN (FRONTEND) ---
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin.html')));
+app.get('/kode_rahasia_barizi', (req, res) => res.sendFile(path.join(__dirname, 'kode_rahasia_barizi.html')));
 
-// API Simpan Pesanan
+// --- API ROUTES (BACKEND) ---
+
+// 1. Simpan Pesanan Baru + Upload Bukti
 app.post('/api/konfirmasi', upload.single('image'), async (req, res) => {
     try {
-        const newOrder = new Order({
+        if (!req.file) return res.status(400).json({ error: "Bukti transfer harus diunggah" });
+
+        const orderBaru = new Order({
             nama: req.body.nama,
             email: req.body.email,
             buku: req.body.buku,
-            buktiGambar: req.file.path
+            buktiGambar: req.file.path // URL dari Cloudinary
         });
-        await newOrder.save();
-        res.json({ success: true });
+
+        await orderBaru.save();
+        res.json({ success: true, message: "Pesanan berhasil disimpan!" });
+    } catch (err) {
+        res.status(500).json({ error: "Terjadi kesalahan server: " + err.message });
+    }
+});
+
+// 2. Ambil Semua Pesanan untuk Admin
+app.get('/api/orders', async (req, res) => {
+    try {
+        const data = await Order.find().sort({ tanggal: -1 });
+        res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// API Ambil Data Pesanan
-app.get('/api/orders', async (req, res) => {
-    const orders = await Order.find().sort({ _id: -1 });
-    res.json(orders);
-});
-
+// Export untuk Vercel
 module.exports = app;
-    
+                            
