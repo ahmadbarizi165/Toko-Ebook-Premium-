@@ -27,16 +27,15 @@
                 <table class="w-full text-left">
                     <thead class="bg-slate-800 text-white text-sm uppercase">
                         <tr>
-                            <th class="p-4">Tanggal</th>
+                            <th class="p-4 text-center">Tgl</th>
                             <th class="p-4">Nama Pelanggan</th>
-                            <th class="p-4">Email</th>
-                            <th class="p-4">Judul Ebook</th>
+                            <th class="p-4 text-center">Judul Ebook</th>
                             <th class="p-4 text-center">Aksi Pelayanan</th>
                         </tr>
                     </thead>
-                    <tbody id="tabelPesanan" class="divide-y divide-slate-100 text-slate-700">
+                    <tbody id="tabelPesanan" class="divide-y divide-slate-100 text-slate-700 text-sm">
                         <tr>
-                            <td colspan="5" class="p-10 text-center text-slate-400 italic">Sedang memuat data pesanan...</td>
+                            <td colspan="4" class="p-10 text-center text-slate-400 italic">Sedang memuat data pesanan...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -52,41 +51,51 @@
                 const tabel = document.getElementById('tabelPesanan');
                 
                 if (data.length === 0) {
-                    tabel.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-slate-400">Belum ada pesanan yang masuk.</td></tr>';
+                    tabel.innerHTML = '<tr><td colspan="4" class="p-10 text-center text-slate-400">Belum ada pesanan yang masuk.</td></tr>';
                     return;
                 }
 
-                tabel.innerHTML = data.map(order => `
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="p-4 text-xs text-slate-500">${new Date(order.tanggal).toLocaleString('id-ID')}</td>
-                        <td class="p-4 font-semibold text-slate-900">${order.nama}</td>
-                        <td class="p-4 text-blue-600 italic">${order.email}</td>
-                        <td class="p-4">
-                            <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-xs font-bold border border-blue-100">
-                                ${order.buku}
-                            </span>
-                        </td>
-                        <td class="p-4 flex justify-center gap-2">
-                            <a href="${order.buktiGambar}" target="_blank" class="bg-slate-100 text-slate-700 px-3 py-2 rounded-lg text-xs font-bold hover:bg-slate-200 transition border border-slate-300">
-                                CEK BUKTI
-                            </a>
-                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=${order.email}&su=Akses Download Ebook: ${order.buku}&body=Halo ${order.nama},%0D%0A%0D%0ATerima kasih telah melakukan pembayaran.%0D%0A%0D%0AIni adalah link untuk mendownload eBook Anda:%0D%0A[MASUKKAN LINK FILE DI SINI]%0D%0A%0D%0ASelamat membaca!%0D%0A%0D%0ASalam hangat,%0D%0AAhmad Barizi" 
-                               target="_blank" 
-                               class="bg-green-600 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-green-700 transition shadow-md">
-                                KIRIM FILE
-                            </a>
-                        </td>
-                    </tr>
-                `).join('');
+                tabel.innerHTML = data.map(order => {
+                    // Draf Pesan WhatsApp
+                    const pesanWA = `Halo ${order.nama}, terima kasih telah membeli eBook *${order.buku}*. Berikut link download-nya: [LINK_FILE_ANDA]`;
+                    const linkWA = `https://wa.me/?text=${encodeURIComponent(pesanWA)}`;
+                    
+                    // Draf Pesan Email
+                    const subjekEmail = `Link Download Ebook: ${order.buku}`;
+                    const bodyEmail = `Halo ${order.nama},%0D%0A%0D%0ATerima kasih sudah membeli eBook di Toko Barizi.%0D%0A%0D%0ABerikut link download Anda:%0D%0A[LINK_FILE_ANDA]%0D%0A%0D%0ASalam hangat,%0D%0AAhmad Barizi`;
+                    const linkEmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${order.email}&su=${encodeURIComponent(subjekEmail)}&body=${bodyEmail}`;
+
+                    return `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-4 text-xs text-slate-500 text-center">${new Date(order.tanggal).toLocaleDateString('id-ID')}</td>
+                            <td class="p-4 font-semibold text-slate-900">${order.nama}<br><span class="text-xs text-blue-500 font-normal">${order.email}</span></td>
+                            <td class="p-4 text-center">
+                                <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-md text-[10px] font-bold border border-blue-100 uppercase">
+                                    ${order.buku}
+                                </span>
+                            </td>
+                            <td class="p-4">
+                                <div class="flex flex-wrap justify-center gap-2">
+                                    <a href="${order.buktiGambar}" target="_blank" class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-[10px] font-bold hover:bg-slate-200 border border-slate-300">
+                                        CEK BUKTI
+                                    </a>
+                                    <a href="${linkEmail}" target="_blank" class="bg-red-500 text-white px-2 py-1 rounded text-[10px] font-bold hover:bg-red-600 transition shadow-sm">
+                                        VIA GMAIL
+                                    </a>
+                                    <a href="${linkWA}" target="_blank" class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold hover:bg-green-600 transition shadow-sm">
+                                        VIA WA
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
             } catch (error) {
                 console.error("Gagal memuat data:", error);
-                document.getElementById('tabelPesanan').innerHTML = '<tr><td colspan="5" class="p-10 text-center text-red-500 font-bold">Gagal mengambil data dari server. Pastikan Database aktif.</td></tr>';
+                document.getElementById('tabelPesanan').innerHTML = '<tr><td colspan="4" class="p-10 text-center text-red-500 font-bold">Gagal mengambil data dari server.</td></tr>';
             }
         }
-
-        // Panggil fungsi saat halaman dibuka
         muatPesanan();
     </script>
 </body>
-    </html>
-            
+</html>
