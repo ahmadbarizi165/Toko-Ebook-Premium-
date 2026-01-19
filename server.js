@@ -7,15 +7,19 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 
 const app = express();
+
+// 1. MIDDLEWARE (WAJIB DI ATAS)
 app.use(express.json());
 app.use(cors());
+// Menghubungkan file statis (agar index.html dan kode_rahasia_barizi.html bisa dibaca)
+app.use(express.static(path.join(__dirname, '/')));
 
-// --- KONEKSI DATABASE ---
+// 2. KONEKSI DATABASE
 mongoose.connect(process.env.DATABASE_URL)
-    .then(() => console.log("Database Barizi Terhubung"))
-    .catch(err => console.error("Gagal Koneksi:", err));
+    .then(() => console.log("Database Barizi Aktif"))
+    .catch(err => console.error("Database Error:", err));
 
-// --- KONFIGURASI CLOUDINARY ---
+// 3. KONFIGURASI CLOUDINARY
 cloudinary.config({
     cloud_name: 'dvq18aq4p',
     api_key: '73295193389493',
@@ -31,7 +35,7 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage: storage });
 
-// --- SCHEMA PESANAN ---
+// 4. MODEL DATA
 const Order = mongoose.model('Order', new mongoose.Schema({
     nama: String,
     email: String,
@@ -40,11 +44,19 @@ const Order = mongoose.model('Order', new mongoose.Schema({
     tanggal: { type: Date, default: Date.now }
 }));
 
-// --- ROUTES TAMPILAN ---
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
-app.get('/kode_rahasia_barizi', (req, res) => res.sendFile(path.join(__dirname, 'kode_rahasia_barizi.html')));
+// 5. JALUR TAMPILAN (FRONTEND)
+// Halaman Utama
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
-// --- API SISTEM ---
+// Halaman Admin Rahasia
+app.get('/kode_rahasia_barizi', (req, res) => {
+    res.sendFile(path.join(__dirname, 'kode_rahasia_barizi.html'));
+});
+
+// 6. JALUR DATA (API BACKEND)
+// Simpan Pesanan
 app.post('/api/konfirmasi', upload.single('image'), async (req, res) => {
     try {
         const order = new Order({
@@ -56,10 +68,11 @@ app.post('/api/konfirmasi', upload.single('image'), async (req, res) => {
         await order.save();
         res.json({ success: true });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ success: false, error: err.message });
     }
 });
 
+// Ambil Data Pesanan untuk Admin
 app.get('/api/orders', async (req, res) => {
     try {
         const data = await Order.find().sort({ _id: -1 });
@@ -69,5 +82,6 @@ app.get('/api/orders', async (req, res) => {
     }
 });
 
+// 7. EXPORT UNTUK VERCEL
 module.exports = app;
-    
+           
