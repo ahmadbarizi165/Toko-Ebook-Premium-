@@ -3,191 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-PREMIUM | Toko eBook Digital</title>
+    <title>E-Premium - Ahmad Barizi</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .page { display: none; }
-        .page.active { display: block; }
-        .book-card:hover img { transform: scale(1.05); }
+        .modal { display: none; position: fixed; z-index: 50; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
 
-    <nav class="flex justify-between items-center p-4 px-6 md:px-10 border-b shadow-sm sticky top-0 bg-white z-50">
-        <h2 onclick="showPage('home')" class="text-2xl font-bold text-blue-900 tracking-tighter italic cursor-pointer">E-PREMIUM</h2>
-        <div class="hidden md:flex gap-6 text-sm font-medium">
-            <span onclick="showPage('home')" class="cursor-pointer hover:text-blue-600">Home</span>
-            <span onclick="showPage('library')" class="cursor-pointer hover:text-blue-600">My Library</span>
-            <span onclick="showPage('admin')" class="cursor-pointer hover:text-red-600 font-bold">Admin</span>
-        </div>
-        <div class="flex gap-4 items-center">
-            <i data-lucide="shopping-cart" class="text-gray-600 cursor-pointer"></i>
-            <button class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-bold">Login</button>
-        </div>
+    <nav class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-40">
+        <h1 class="text-2xl font-bold text-blue-800 italic">E-PREMIUM</h1>
+        <button onclick="window.location.reload()" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold hover:bg-blue-700">Login</button>
     </nav>
 
-    <div id="home" class="page active">
-        <div class="bg-gradient-to-r from-blue-900 to-indigo-800 text-white p-12 text-center">
-            <h1 class="text-4xl font-extrabold mb-4">Perpustakaan Digital Premium</h1>
-            <p class="text-blue-100">Dapatkan akses instan ke eBook terbaik pilihan kurator.</p>
-        </div>
-        <div class="max-w-7xl mx-auto p-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div onclick="showPage('detail')" class="book-card cursor-pointer group">
-                    <div class="overflow-hidden rounded-lg mb-3 shadow-md bg-white">
-                        <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&w=400&q=80" class="w-full h-64 object-cover transition duration-300">
-                    </div>
-                    <h3 class="font-bold text-gray-800 group-hover:text-blue-600">Seni Bisnis Digital</h3>
-                    <p class="text-blue-700 font-bold">Rp 149.000</p>
-                </div>
-                </div>
-        </div>
-    </div>
-
-    <div id="detail" class="page max-w-6xl mx-auto p-8 bg-white mt-10 rounded-xl shadow-lg">
-      <button onclick="showPage('confirm')" class="w-full bg-orange-500 ...">BELI SEKARANG</button>
-      
-    		
-    	<div class="flex flex-col md:flex-row gap-10">
-            <div class="w-full md:w-1/3 text-center">
-                <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&w=400&q=80" class="rounded-lg shadow-2xl mx-auto">
-                <button class="mt-6 w-full border border-gray-300 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50">
-                    <i data-lucide="book-open"></i> Baca Cuplikan
-                </button>
-            </div>
-            <div class="w-full md:w-2/3">
-                <h1 class="text-4xl font-bold mb-2">Seni Bisnis Digital</h1>
-                <p class="text-xl text-blue-600 mb-6">Penulis: Ahmad Barizi</p>
-                <p class="text-gray-600 leading-relaxed mb-8">Panduan eksklusif membangun kerajaan bisnis dari nol menggunakan platform digital modern.</p>
-                
-                <div class="bg-gray-50 border p-6 rounded-xl">
-                    <p class="text-gray-500 line-through">Rp 199.000</p>
-                    <p class="text-4xl font-bold text-red-600 mb-6">Rp 149.000</p>
-                    <button class="w-full bg-orange-500 text-white py-4 rounded-full font-bold text-lg mb-4 hover:bg-orange-600 transition shadow-lg">BELI SEKARANG</button>
-                    
-                    <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                        <p class="text-xs font-bold text-blue-800 uppercase mb-2">Transfer Bank (Manual):</p>
-                        <p class="text-sm font-bold">SeaBank: 9019 8149 5649</p>
-                        <p class="text-sm">A/N: AHMAD BARIZI</p>
-                        <p class="text-xs text-gray-500 mt-2 italic">*Kirim bukti transfer ke WhatsApp admin</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="library" class="page max-w-6xl mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-8">Koleksi Saya</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-4 rounded-xl shadow-sm border flex gap-4">
-                <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&w=400&q=80" class="w-24 rounded">
-                <div class="flex-1">
-                    <h4 class="font-bold">Seni Bisnis Digital</h4>
-                    <div class="w-full bg-gray-200 h-2 rounded-full mt-4">
-                        <div class="bg-green-500 h-2 rounded-full w-[65%]"></div>
-                    </div>
-                    <div class="flex gap-2 mt-4">
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold flex items-center gap-1"><i data-lucide="play" size="14"></i> Baca</button>
-                        <button class="border px-4 py-2 rounded text-sm flex items-center gap-1"><i data-lucide="download" size="14"></i> PDF</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="admin" class="page max-w-4xl mx-auto p-8 mt-10 bg-white shadow-2xl rounded-2xl">
-       
-        <div id="confirm" class="page max-w-2xl mx-auto p-8 mt-10 bg-white shadow-xl rounded-2xl border border-blue-50">
-        <div class="text-center mb-8">
-            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i data-lucide="check-circle" class="text-blue-600 w-8 h-8"></i>
-            </div>
-            <h1 class="text-2xl font-bold text-gray-800">Konfirmasi Pembayaran</h1>
-            <p class="text-gray-500">Silakan unggah bukti transfer Anda untuk aktivasi eBook.</p>
-        </div>
-
-        <form onsubmit="handleConfirm(event)" class="space-y-6">
-            <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500 mb-6">
-                <p class="text-xs text-gray-500 uppercase font-bold">Tujuan Transfer:</p>
-                <p class="text-sm font-bold text-blue-900">SeaBank - 9019 8149 5649 (Ahmad Barizi)</p>
-            </div>
-
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Nama Pengirim (Sesuai Rekening)</label>
-                <input type="text" required class="w-full border p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Budi Santoso">
-            </div>
-
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Pilih eBook yang Dibeli</label>
-                <select class="w-full border p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Seni Bisnis Digital (Rp 149.000)</option>
-                    <option>Mastering React 2026 (Rp 199.000)</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Upload Bukti Transfer (Gambar/Screenshot)</label>
-                <div class="relative border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition cursor-pointer">
-                    <input type="file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required>
-                    <i data-lucide="image" class="mx-auto text-gray-400 mb-2"></i>
-                    <p class="text-sm text-gray-500">Klik atau seret gambar bukti transfer di sini</p>
-                </div>
-            </div>
-
-            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg transition duration-300 flex items-center justify-center gap-2">
-                <i data-lucide="send"></i> Kirim Konfirmasi
-            </button>
+    <div class="max-w-4xl mx-auto p-6 text-center">
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Seni Bisnis Digital</h2>
+        <p class="text-blue-600 font-semibold mb-6 text-xl">Penulis: Ahmad Barizi</p>
+        
+        <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 mb-10">
+            <p class="text-gray-600 text-lg mb-8 leading-relaxed">Panduan eksklusif membangun kerajaan bisnis dari nol menggunakan platform digital modern.</p>
             
-            <p class="text-center text-xs text-gray-400 mt-4">
-                Admin akan memverifikasi pembayaran Anda dalam waktu maksimal 1x24 jam.
-            </p>
-        </form>
-    </div>
-		
-    	<div class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-bold">Panel Admin</h1>
-            <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-xs font-bold uppercase">Mode Pemilik</span>
+            <div class="mb-6">
+                <span class="text-gray-400 line-through text-xl">Rp 199.000</span>
+                <div class="text-5xl font-black text-red-600">Rp 149.000</div>
+            </div>
+
+            <button onclick="bukaModal()" class="bg-orange-600 text-white text-2xl font-bold py-4 px-12 rounded-2xl shadow-lg hover:scale-105 transition-transform w-full md:w-auto">
+                BELI SEKARANG
+            </button>
         </div>
-        <form class="space-y-6">
-            <div>
-                <label class="block text-sm font-bold mb-2">Judul eBook</label>
-                <input type="text" class="w-full border p-3 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Masukkan judul...">
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-bold mb-2">Harga (Rp)</label>
-                    <input type="number" class="w-full border p-3 rounded-lg" placeholder="149000">
+    </div>
+
+    <div id="modalBeli" class="modal flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+            <button onclick="tutupModal()" class="absolute top-4 right-4 text-gray-400 text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold mb-6 text-center">Konfirmasi Pembayaran</h3>
+            
+            <form id="formOrder" onsubmit="kirimPesanan(event)">
+                <div class="space-y-4">
+                    <input type="text" id="nama" placeholder="Nama Lengkap" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="email" id="email" placeholder="Email (untuk pengiriman eBook)" required class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <select id="buku" class="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Seni Bisnis Digital">Seni Bisnis Digital</option>
+                        <option value="Menguak Potensi Diri Tanpa Batas">Menguak Potensi Diri Tanpa Batas</option>
+                    </select>
+                    <label class="block text-sm font-medium text-gray-700">Upload Bukti Transfer (Gambar):</label>
+                    <input type="file" id="bukti" accept="image/*" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700">
                 </div>
-                <div>
-                    <label class="block text-sm font-bold mb-2">File Cover</label>
-                    <input type="file" class="text-sm mt-2">
-                </div>
-            </div>
-            <button class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-black transition">PUBLIKASIKAN BUKU</button>
-        </form>
+                
+                <button type="submit" id="btnKirim" class="w-full bg-blue-600 text-white font-bold py-3 mt-8 rounded-xl hover:bg-blue-700 transition-colors">
+                    KONFIRMASI SEKARANG
+                </button>
+            </form>
+        </div>
     </div>
 
     <script>
-        // Inisialisasi Icons
-        lucide.createIcons();
+        function bukaModal() { document.getElementById('modalBeli').style.display = 'flex'; }
+        function tutupModal() { document.getElementById('modalBeli').style.display = 'none'; }
 
-        // Fungsi Navigasi Halaman Sederhana
-        function showPage(pageId) {
-            // Sembunyikan semua halaman
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            // Tampilkan halaman yang dipilih
-            document.getElementById(pageId).classList.add('active');
-            // Scroll ke atas
-            window.scrollTo(0, 0);
-    function handleConfirm(event) {
-    event.preventDefault();
-    alert("Terima kasih! Bukti transfer Anda telah terkirim. Admin Ahmad Barizi akan segera memverifikasi pesanan Anda.");
-    showPage('home'); // Kembali ke home setelah konfirmasi
-}
-}
+        async function kirimPesanan(event) {
+            event.preventDefault();
+            const btn = document.getElementById('btnKirim');
+            btn.innerHTML = "Sedang Mengirim...";
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('nama', document.getElementById('nama').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('buku', document.getElementById('buku').value);
+            formData.append('image', document.getElementById('bukti').files[0]);
+
+            try {
+                // Pastikan alamat fetch ini sesuai dengan URL Vercel Anda /api/konfirmasi
+                const response = await fetch('/api/konfirmasi', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('✅ Sukses! Bukti transfer telah terkirim. Mohon tunggu link eBook di email Anda.');
+                    tutupModal();
+                } else {
+                    alert('❌ Gagal mengirim. Pastikan semua data terisi.');
+                }
+            } catch (error) {
+                alert('❌ Error koneksi ke server.');
+            } finally {
+                btn.innerHTML = "KONFIRMASI SEKARANG";
+                btn.disabled = false;
+            }
+        }
     </script>
 </body>
 </html>
