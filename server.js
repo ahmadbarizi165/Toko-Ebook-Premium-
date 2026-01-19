@@ -5,4 +5,3 @@ app.get('/', (req, res) => {
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
-
