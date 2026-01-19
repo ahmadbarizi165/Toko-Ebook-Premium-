@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - E-Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 p-6">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold text-slate-800 mb-8">Daftar Pesanan Masuk</h1>
+        
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-slate-800 text-white">
+                    <tr>
+                        <th class="p-4 text-sm font-semibold uppercase">Pembeli</th>
+                        <th class="p-4 text-sm font-semibold uppercase">E-Book</th>
+                        <th class="p-4 text-sm font-semibold uppercase">Bukti Transfer</th>
+                        <th class="p-4 text-sm font-semibold uppercase">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="list-pesanan">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function ambilData() {
+            const res = await fetch('/api/orders');
+            const data = await res.json();
+            const list = document.getElementById('list-pesanan');
+            
+            list.innerHTML = data.map(order => `
+                <tr class="border-b hover:bg-slate-50">
+                    <td class="p-4 font-medium text-slate-700">
+                        ${order.nama} <br>
+                        <span class="text-xs text-slate-500">${order.email}</span>
+                    </td>
+                    <td class="p-4 text-slate-600">${order.buku}</td>
+                    <td class="p-4">
+                        <a href="${order.buktiGambar}" target="_blank" class="text-blue-600 hover:underline text-sm font-bold">Lihat Bukti</a>
+                    </td>
+                    <td class="p-4">
+                        <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700 shadow-md">Approve & Kirim Ebook</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        ambilData();
+    </script>
+</body>
+</html>
