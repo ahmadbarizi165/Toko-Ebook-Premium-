@@ -1,10 +1,7 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "server.js", "use": "@vercel/node" }
-  ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/server.js" },
+    { "source": "/api/(.*)", "destination": "/api/server.js" },
     { "source": "/kode_rahasia_barizi", "destination": "/kode_rahasia_barizi.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
